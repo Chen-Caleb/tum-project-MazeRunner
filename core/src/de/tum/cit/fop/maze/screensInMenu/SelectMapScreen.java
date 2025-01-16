@@ -16,10 +16,10 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.tum.cit.fop.maze.MazeRunnerGame;
 
-public class SelectMapScreen implements Screen {
-    private final Stage stage;
+public class SelectMapScreen extends ScreenTemplate {
 
     public SelectMapScreen(MazeRunnerGame game) {
+        super(game);
         var camera = new OrthographicCamera();
         camera.zoom = 1.5f; // Set camera zoom for a closer view
 
@@ -31,7 +31,7 @@ public class SelectMapScreen implements Screen {
         stage.addActor(table); // Add the table to the stage
 
 
-        Label titleLabel = new Label("Choose Level",game.getSkin(),"title");
+        Label titleLabel = new Label("Choose Level", game.getSkin(), "title");
         table.add(titleLabel).padBottom(200).row();
 
         TextButton level1 = new TextButton("Level 1", game.getSkin());
@@ -79,6 +79,8 @@ public class SelectMapScreen implements Screen {
         });
         table.add(level5).padBottom(10).row();
 
+        returnToMenu();
+
 
 
 
@@ -86,7 +88,7 @@ public class SelectMapScreen implements Screen {
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(stage);
+
     }
 
     @Override
@@ -118,6 +120,6 @@ public class SelectMapScreen implements Screen {
 
     @Override
     public void dispose() {
-        stage.dispose(); // 释放舞台资源
+
     }
 }
