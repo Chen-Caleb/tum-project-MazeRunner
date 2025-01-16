@@ -81,8 +81,8 @@ public class Maze {
                 walls.add(new Wall(x, y));
                 break;
             case 1:
-                Entrance Entrance = new Entrance(x, y);
-                Character Character = new Character(x, y, 1f, 2f);
+                entrance = new Entrance(x, y);
+                character = new Character(x, y, 1f, 2f);
                 break;
             case 2:
                 exits.add(new Exit(x, y));
@@ -102,7 +102,33 @@ public class Maze {
             default:
                 System.err.println("Unknown element type: " + value);
         }
+    }
 
+    public Character getCharacter() {
+        return character;
+    }
 
+    public Entrance getEntrance() {
+        return entrance;
+    }
+
+    public List<Wall> getWalls() {
+        return walls;
+    }
+
+    public List<Exit> getExits() {
+        return exits;
+    }
+
+    public List<Trap> getTraps() {
+        return traps;
+    }
+
+    public List<Mob> getMobs() {
+        return mobs;
+    }
+
+    public List<Key> getKeys() {
+        return keys;
     }
 }

@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.ScreenUtils;
+import de.tum.cit.fop.maze.gameobject.*;
 
 /**
  * The GameScreen class is responsible for rendering the gameplay screen.
@@ -16,6 +17,7 @@ public class GameScreen implements Screen {
     private final MazeRunnerGame game;
     private final OrthographicCamera camera;
     private final BitmapFont font;
+    private final Maze maze;
 
     private float sinusInput = 0f;
 
@@ -24,8 +26,10 @@ public class GameScreen implements Screen {
      *
      * @param game The main game class, used to access global resources and methods.
      */
-    public GameScreen(MazeRunnerGame game) {
+    public GameScreen(MazeRunnerGame game, String level) {
         this.game = game;
+        this.maze = new Maze(level);
+        maze.readMoreProperties();
 
         // Create and configure the camera for the game view
         camera = new OrthographicCamera();
@@ -72,6 +76,43 @@ public class GameScreen implements Screen {
         );
 
         game.getSpriteBatch().end(); // Important to call this after drawing everything
+    }
+
+    private void renderMaze() {
+        // Draw walls
+        for (Wall wall : maze.getWalls()) {
+            wall.render(game.getSpriteBatch());
+        }
+
+        // Draw exits
+//        for (Exit exit : maze.getExits()) {
+//            exit.render(game.getSpriteBatch());
+//        }
+//
+//        // Draw traps
+//        for (Trap trap : maze.getTraps()) {
+//            trap.render(game.getSpriteBatch());
+//        }
+//
+//        // Draw mobs
+//        for (Mob mob : maze.getMobs()) {
+//            mob.render(game.getSpriteBatch());
+//        }
+//
+//        // Draw keys
+//        for (Key key : maze.getKeys()) {
+//            key.render(game.getSpriteBatch());
+//        }
+//
+//        // Draw the player character
+//        if (maze.getCharacter() != null) {
+//            maze.getCharacter().render(game.getSpriteBatch());
+//        }
+//
+//        // Draw the entrance
+//        if (maze.getEntrance() != null) {
+//            maze.getEntrance().render(game.getSpriteBatch());
+//        }
     }
 
     @Override

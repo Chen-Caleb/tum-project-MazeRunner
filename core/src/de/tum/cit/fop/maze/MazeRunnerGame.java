@@ -72,11 +72,32 @@ public class MazeRunnerGame extends Game {
      * Switches to the game screen.
      */
     public void goToGame() {
-        this.setScreen(new GameScreen(this)); // Set the current screen to GameScreen
+        this.setScreen(new GameScreen(this,"maps/level-1.properties")); // Set the current screen to GameScreen
         if (menuScreen != null) {
             menuScreen.dispose(); // Dispose the menu screen if it exists
             menuScreen = null;
         }
+    }
+
+    //Switches to different game screen through the level
+    public void goToGameLevel1() {
+        this.setScreen(new GameScreen(this, "maps/level-1.properties"));
+    }
+
+    public void goToGameLevel2() {
+        this.setScreen(new GameScreen(this, "maps/level-2.properties"));
+    }
+
+    public void goToGameLevel3() {
+        this.setScreen(new GameScreen(this, "maps/level-3.properties"));
+    }
+
+    public void goToGameLevel4() {
+        this.setScreen(new GameScreen(this, "maps/level-4.properties"));
+    }
+
+    public void goToGameLevel5() {
+        this.setScreen(new GameScreen(this, "maps/level-5.properties"));
     }
 
     /**

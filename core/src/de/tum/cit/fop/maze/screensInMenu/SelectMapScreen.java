@@ -34,7 +34,7 @@ public class SelectMapScreen extends ScreenTemplate {
         level1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
+                game.goToGameLevel1();
             }
         });
         table.add(level1).padBottom(10).row();
@@ -43,7 +43,7 @@ public class SelectMapScreen extends ScreenTemplate {
         level1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
+                game.goToGameLevel2();
             }
         });
         table.add(level2).padBottom(10).row();
@@ -52,7 +52,7 @@ public class SelectMapScreen extends ScreenTemplate {
         level1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
+                game.goToGameLevel3();
             }
         });
         table.add(level3).padBottom(10).row();
@@ -61,7 +61,7 @@ public class SelectMapScreen extends ScreenTemplate {
         level1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
+                game.goToGameLevel4();
             }
         });
         table.add(level4).padBottom(10).row();
@@ -70,7 +70,7 @@ public class SelectMapScreen extends ScreenTemplate {
         level1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
+                game.goToGameLevel5();
             }
         });
         table.add(level5).padBottom(10).row();
