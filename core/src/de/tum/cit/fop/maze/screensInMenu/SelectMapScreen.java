@@ -26,12 +26,8 @@ public class SelectMapScreen extends ScreenTemplate {
         Viewport viewport = new ScreenViewport(camera); // Create a viewport with the camera
         stage = new Stage(viewport, game.getSpriteBatch()); // Create a stage for UI elements
 
-        Table table = new Table(); // Create a table for layout
-        table.setFillParent(true); // Make the table fill the stage
-        stage.addActor(table); // Add the table to the stage
-
-
         Label titleLabel = new Label("Choose Level", game.getSkin(), "title");
+        initialTable();
         table.add(titleLabel).padBottom(200).row();
 
         TextButton level1 = new TextButton("Level 1", game.getSkin());
@@ -81,45 +77,6 @@ public class SelectMapScreen extends ScreenTemplate {
 
         returnToMenu();
 
-
-
-
     }
 
-    @Override
-    public void show() {
-
-    }
-
-    @Override
-    public void render(float delta) {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // 清屏
-        stage.act(delta); // 更新舞台
-        stage.draw(); // 绘制舞台
-    }
-
-    @Override
-    public void resize(int i, int i1) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
-    }
 }
