@@ -9,7 +9,8 @@ public class Character extends Human{
     protected int characterFrameHeight = 32;
     protected final Texture characterSheet = new Texture(Gdx.files.internal("character.png"));
 
-    public Character(float x, float y) {
-        super(x, y);
+    public Character(float x, float y, float speed, float runningSpeed) {
+        super(x, y, speed);
+        this.runningSpeed = runningSpeed;
     }
 }

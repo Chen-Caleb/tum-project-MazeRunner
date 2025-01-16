@@ -7,10 +7,17 @@ import com.badlogic.gdx.math.Vector2;
 public abstract class GameObject {
     protected Vector2 position;
     protected Rectangle rectangle;
-    protected int width, height;
+    protected static int width;
+    protected static int height;
     protected float stateTime;
 
     public GameObject(float x, float y) {
-        this.position = new Vector2(x, y);;
+        this.position = new Vector2(x, y);
+        this.rectangle = new Rectangle(x, y, width, height);
+    }
+
+    public Rectangle getRectangle() {
+        return rectangle;
     }
 }
+

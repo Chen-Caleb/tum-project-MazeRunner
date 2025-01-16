@@ -8,9 +8,6 @@ public class Mob extends Human {
     protected final Texture mobSheet = new Texture(Gdx.files.internal("mobs.png"));
 
     public Mob(float x, float y, float speed) {
-        super(x, y);
-        this.speed = speed;
-
-
+        super(x, y, speed);
     }
 }
