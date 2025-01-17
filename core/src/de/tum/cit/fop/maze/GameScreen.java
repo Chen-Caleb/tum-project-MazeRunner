@@ -76,6 +76,8 @@ public class GameScreen implements Screen {
         );
 
         game.getSpriteBatch().end(); // Important to call this after drawing everything
+
+
     }
 
     private void renderMaze() {
@@ -84,7 +86,7 @@ public class GameScreen implements Screen {
             wall.render(game.getSpriteBatch());
         }
 
-        // Draw exits
+         // Draw exits
 //        for (Exit exit : maze.getExits()) {
 //            exit.render(game.getSpriteBatch());
 //        }
@@ -103,13 +105,13 @@ public class GameScreen implements Screen {
 //        for (Key key : maze.getKeys()) {
 //            key.render(game.getSpriteBatch());
 //        }
-//
-//        // Draw the player character
-//        if (maze.getCharacter() != null) {
-//            maze.getCharacter().render(game.getSpriteBatch());
-//        }
-//
-//        // Draw the entrance
+
+        // Draw the player character
+        if (maze.getCharacter() != null) {
+            maze.getCharacter().render(game.getSpriteBatch());
+        }
+
+        // Draw the entrance
 //        if (maze.getEntrance() != null) {
 //            maze.getEntrance().render(game.getSpriteBatch());
 //        }
