@@ -221,6 +221,69 @@ public class GameScreen implements Screen {
             }
 
 
+            /**
+             * mob and wall collision, if it hits a wall then it goes in the opposite direction.
+             * same is added for the exits
+             */
+            for (Mob mob : maze.getMobs()) {
+                if (maze.getCharacter().getRectangle().overlaps(mob.getRectangle())) {
+                    //playTwoSounds(ghostSound, takeDamageSound);
+                    invulnerable(1f);
+                }
+
+                /**
+                 * mob and wall collision
+                 * is mob hits a wall, go the opposite direction
+                 */
+                for (Wall wall : maze.getWalls()) {
+                    if (mob.getRectangle().overlaps(wall.getSides()[0])
+                            || mob.getRectangle().overlaps(wall.getSides()[1])
+                            || mob.getRectangle().overlaps(wall.getSides()[2])
+                            || mob.getRectangle().overlaps(wall.getSides()[3])) {
+                        switch (mob.getCurrentDirection()) {
+                            case 0:
+                                mob.move(3);
+                                break;
+                            case 1:
+                                mob.move(2);
+                                break;
+                            case 2:
+                                mob.move(1);
+                                break;
+                            case 3:
+                                mob.move(0);
+                                break;
+                        }
+                    }
+                }
+                /**
+                 * same collision logic for exits as well
+                 */
+                for (Mob mob1 : maze.getMobs()) {
+                    for (Exit exit1 : maze.getExits()) {
+                        if (mob1.getRectangle().overlaps(exit1.getRectangle())) {
+                            switch (mob.getCurrentDirection()) {
+                                case 0:
+                                    mob.move(3);
+                                    break;
+                                case 1:
+                                    mob.move(2);
+                                    break;
+                                case 2:
+                                    mob.move(1);
+                                    break;
+                                case 3:
+                                    mob.move(0);
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+
+
+
+
 
 
 
