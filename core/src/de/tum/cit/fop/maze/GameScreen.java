@@ -294,11 +294,35 @@ public class GameScreen implements Screen {
 
 
 
+
+
             //game.getSpriteBatch().end(); // Important to call this after drawing everything
 
 
         }
     }
+    /**
+     * set camera zoom
+     * also allow player to view the whole map by pressing "M"
+     */
+    private void renderCamera() {
+        camera.position.x = maze.getCharacter().getRectangle().x;
+        camera.position.y = maze.getCharacter().getRectangle().y;
+
+        float zoomX = Gdx.graphics.getWidth() / maze.getMapWidth() * 2f;
+        float zoomY = Gdx.graphics.getHeight() / maze.getMapHeight() * 2f;
+        float zoom = Math.min(zoomX, zoomY);
+        if (Gdx.input.isKeyPressed(Input.Keys.M)) {
+            camera.zoom = zoom / 3f;
+            camera.position.set(maze.getMapWidth() / 2, maze.getMapHeight() / 2, 0);
+        } else {
+            camera.zoom = 0.25f;
+        }
+        camera.update();
+    }
+
+
+
     /**
      * invulnerability logic added here
      * @param time
