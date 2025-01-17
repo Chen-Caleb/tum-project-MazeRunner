@@ -8,8 +8,8 @@ import com.badlogic.gdx.math.Vector2;
 public abstract class GameObject {
     protected Vector2 position;
     protected  Rectangle rectangle;
-    protected static int width;
-    protected static int height;
+    protected static int width = 16;
+    protected static int height = 16;
     protected float stateTime;
 
     public GameObject(float x, float y) {

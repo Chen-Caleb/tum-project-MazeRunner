@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class Character extends Human {
     protected float runningSpeed;
@@ -18,10 +18,28 @@ public class Character extends Human {
     private boolean upInverse, leftInverse, downInverse, rightInverse;
     private boolean upLeftInverse, upRightInverse, downLeftInverse, downRightInverse;
 
+    /**
+     * running animation
+     */
+    protected Array<TextureRegion> runDownwardsFrames = new Array<>(TextureRegion.class);
+    protected Array<TextureRegion> runRightwardsFrames = new Array<>(TextureRegion.class);
+    protected Array<TextureRegion> runUpwardsFrames = new Array<>(TextureRegion.class);
+    protected Array<TextureRegion> runLeftwardsFrames = new Array<>(TextureRegion.class);
+
+    // running animations
+    protected Animation<TextureRegion> characterDownRunningAnimation;
+    protected Animation<TextureRegion> characterRightRunningAnimation;
+    protected Animation<TextureRegion> characterUpRunningAnimation;
+    protected Animation<TextureRegion> characterLeftRunningAnimation;
+
 
     public Character(float x, float y, float speed, float runningSpeed) {
         super(x, y, speed);
         this.runningSpeed = runningSpeed;
+        width = 16;
+        height = 32;
+
+        rectangle = new Rectangle(position.x, position.y, width, height - 16);
 
         /**
          * animation logic
@@ -31,16 +49,31 @@ public class Character extends Human {
             walkRightwardsFrames.add(new TextureRegion(characterSheet, column * Character.width, Character.height, Character.width, Character.height));
             walkUpwardsFrames.add(new TextureRegion(characterSheet, column * Character.width, 2 * Character.height, Character.width, Character.height));
             walkLeftwardsFrames.add(new TextureRegion(characterSheet, column * Character.width, 3 * Character.height, Character.width, Character.height));
+
+            runDownwardsFrames.add(new TextureRegion(characterSheet, (9 + column) * width, 0, width, height));
+            runRightwardsFrames.add(new TextureRegion(characterSheet, (9 + column) * width, height, width, height));
+            runUpwardsFrames.add(new TextureRegion(characterSheet, (9 + column) * width, 2 * height, width, height));
+            runLeftwardsFrames.add(new TextureRegion(characterSheet, (9 + column) * width, 3 * height, width, height));
+
+
         }
 
         /**
          * gets the correct frames for animation
-                */
+         */
         float frameDuration = 0.1f;
         walkDownAnimation = new Animation<>(frameDuration, walkDownwardsFrames);
         walkRightAnimation = new Animation<>(frameDuration, walkRightwardsFrames);
         walkUpAnimation = new Animation<>(frameDuration, walkUpwardsFrames);
         walkLeftAnimation = new Animation<>(frameDuration, walkLeftwardsFrames);
+
+        currentAnimation = walkDownAnimation;
+        stateTime = 0f;
+
+        characterDownRunningAnimation = new Animation<>(0.1f, runDownwardsFrames);
+        characterRightRunningAnimation = new Animation<>(0.1f, runRightwardsFrames);
+        characterUpRunningAnimation = new Animation<>(0.1f, runUpwardsFrames);
+        characterLeftRunningAnimation = new Animation<>(0.1f, runLeftwardsFrames);
 
         currentAnimation = walkDownAnimation;
         stateTime = 0f;
@@ -58,47 +91,10 @@ public class Character extends Human {
     }
 
 
-//    private void handleInput() {
-//        /**
-//         * movement logic
-//         */
-//        // 用 Map 存储状态变量和对应方法
-//        Map<Boolean, Runnable> inverseActions = new LinkedHashMap<>();
-//        inverseActions.put(upLeftInverse, this::upLeftInverse);
-//        inverseActions.put(upRightInverse, this::upRightInverse);
-//        inverseActions.put(downLeftInverse, this::downLeftInverse);
-//        inverseActions.put(downRightInverse, this::downRightInverse);
-//        inverseActions.put(upInverse, this::upInverse);
-//        inverseActions.put(leftInverse, this::leftInverse);
-//        inverseActions.put(downInverse, this::downInverse);
-//        inverseActions.put(rightInverse, this::rightInverse);
-//
-//        // 遍历 Map，找到第一个满足条件的状态并执行对应方法
-//        for (Map.Entry<Boolean, Runnable> entry : inverseActions.entrySet()) {
-//            if (entry.getKey()) {
-//                entry.getValue().run();
-//                return; // 执行完毕后退出
-//            }
-//        }
-//
-//        // 如果没有任何逆向状态触发，执行默认的行走动画
-//        handleWalkingAnimations();
-//    }
-//
-//    /**
-//     * Handles walking animations for all directions.
-//     */
-//    private void handleWalkingAnimations() {
-//        playerMoveDownwards();
-//        playerMoveRightwards();
-//        playerMoveUpwards();
-//        playerMoveLeftwards();
-//    }
-
-    private void handleInput(){
-        if (upLeftInverse){
+    private void handleInput() {
+        if (upLeftInverse) {
             upLeftInverse();
-        }else if (upRightInverse) {
+        } else if (upRightInverse) {
             upRightInverse();
         } else if (downLeftInverse) {
             downLeftInverse();
@@ -112,16 +108,45 @@ public class Character extends Human {
             downInverse();
         } else if (rightInverse) {
             rightInverse();
-        }else {
+        } else {
             // walking Animations
             playerMoveDownwards();
             playerMoveRightwards();
             playerMoveUpwards();
             playerMoveLeftwards();
+
+
+            // running Animations
+            /**
+             * running logic; animation + speed increase
+             */
+            if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+                if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
+                    currentAnimation = characterDownRunningAnimation;
+                    rectangle.y -= runningSpeed;
+                }
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+                if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
+                    currentAnimation = characterRightRunningAnimation;
+                    rectangle.x += runningSpeed;
+                }
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+                if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
+                    currentAnimation = characterUpRunningAnimation;
+                    rectangle.y += runningSpeed;
+                }
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+                if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
+                    currentAnimation = characterLeftRunningAnimation;
+                    rectangle.x -= runningSpeed;
+                }
+            }
         }
 
     }
-
 
 
     private void upInverse() {
@@ -242,6 +267,70 @@ public class Character extends Human {
     public void render(SpriteBatch spriteBatch) {
         TextureRegion currentFrame = currentAnimation.getKeyFrame(stateTime, true);
         spriteBatch.draw(currentFrame, this.rectangle.x, this.rectangle.y);
+    }
+
+    public boolean isUpInverse() {
+        return upInverse;
+    }
+
+    public void setUpInverse(boolean upInverse) {
+        this.upInverse = upInverse;
+    }
+
+    public boolean isLeftInverse() {
+        return leftInverse;
+    }
+
+    public void setLeftInverse(boolean leftInverse) {
+        this.leftInverse = leftInverse;
+    }
+
+    public boolean isDownInverse() {
+        return downInverse;
+    }
+
+    public void setDownInverse(boolean downInverse) {
+        this.downInverse = downInverse;
+    }
+
+    public boolean isRightInverse() {
+        return rightInverse;
+    }
+
+    public void setRightInverse(boolean rightInverse) {
+        this.rightInverse = rightInverse;
+    }
+
+    public boolean isUpLeftInverse() {
+        return upLeftInverse;
+    }
+
+    public void setUpLeftInverse(boolean upLeftInverse) {
+        this.upLeftInverse = upLeftInverse;
+    }
+
+    public boolean isUpRightInverse() {
+        return upRightInverse;
+    }
+
+    public void setUpRightInverse(boolean upRightInverse) {
+        this.upRightInverse = upRightInverse;
+    }
+
+    public boolean isDownLeftInverse() {
+        return downLeftInverse;
+    }
+
+    public void setDownLeftInverse(boolean downLeftInverse) {
+        this.downLeftInverse = downLeftInverse;
+    }
+
+    public boolean isDownRightInverse() {
+        return downRightInverse;
+    }
+
+    public void setDownRightInverse(boolean downRightInverse) {
+        this.downRightInverse = downRightInverse;
     }
 }
 
