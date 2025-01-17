@@ -1,6 +1,7 @@
 package de.tum.cit.fop.maze.gameobject;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
@@ -26,5 +27,11 @@ public class Human extends GameObject {
     public Human(float x, float y, float speed) {
         super(x, y);
         this.speed = speed;
+    }
+
+
+    @Override
+    public void render(SpriteBatch spriteBatch) {
+
     }
 }

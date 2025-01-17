@@ -1,6 +1,7 @@
 package de.tum.cit.fop.maze.gameobject;
 
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -19,5 +20,7 @@ public abstract class GameObject {
     public Rectangle getRectangle() {
         return rectangle;
     }
+
+    public abstract void render(SpriteBatch spriteBatch);
 }
 
