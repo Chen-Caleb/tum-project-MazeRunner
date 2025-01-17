@@ -5,8 +5,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import de.tum.cit.fop.maze.gameobject.*;
+import de.tum.cit.fop.maze.gameobject.Character;
 
 /**
  * The GameScreen class is responsible for rendering the gameplay screen.
@@ -15,9 +17,11 @@ import de.tum.cit.fop.maze.gameobject.*;
 public class GameScreen implements Screen {
 
     private final MazeRunnerGame game;
-    private final OrthographicCamera camera;
+    private OrthographicCamera camera;
     private final BitmapFont font;
     private final Maze maze;
+    private SpriteBatch spriteBatch;
+
 
     private float sinusInput = 0f;
 
@@ -40,6 +44,23 @@ public class GameScreen implements Screen {
         font = game.getSkin().getFont("font");
     }
 
+    /**
+     * displays the correct map on the screen
+     * displays the sprites as well
+     * also set the camera position
+     */
+    @Override
+    public void show() {
+        spriteBatch = new SpriteBatch();
+
+        camera = new OrthographicCamera();
+        camera.zoom = 0.5f;
+        camera.update();
+
+    }
+
+
+
 
     // Screen interface methods with necessary functionality
     @Override
@@ -61,12 +82,13 @@ public class GameScreen implements Screen {
         // Set up and begin drawing with the sprite batch
         game.getSpriteBatch().setProjectionMatrix(camera.combined);
 
-        game.getSpriteBatch().begin(); // Important to call this before drawing anything
+        game.getSpriteBatch().begin();// Important to call this before drawing anything
 
-        // Render the text
+
+         //Render the text
         font.draw(game.getSpriteBatch(), "Press ESC to go to menu", textX, textY);
 
-        // Draw the character next to the text :) / We can reuse sinusInput here
+         //Draw the character next to the text :) / We can reuse sinusInput here
         game.getSpriteBatch().draw(
                 game.getCharacterDownAnimation().getKeyFrame(sinusInput, true),
                 textX - 96,
@@ -74,6 +96,8 @@ public class GameScreen implements Screen {
                 64,
                 128
         );
+
+
 
         game.getSpriteBatch().end(); // Important to call this after drawing everything
 
@@ -130,10 +154,6 @@ public class GameScreen implements Screen {
     public void resume() {
     }
 
-    @Override
-    public void show() {
-
-    }
 
     @Override
     public void hide() {
