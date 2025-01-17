@@ -3,11 +3,14 @@ package de.tum.cit.fop.maze;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import de.tum.cit.fop.maze.gameobject.*;
+
+import java.util.Iterator;
 
 /**
  * The GameScreen class is responsible for rendering the gameplay screen.
@@ -16,10 +19,17 @@ import de.tum.cit.fop.maze.gameobject.*;
 public class GameScreen implements Screen {
 
     private final MazeRunnerGame game;
-    private final OrthographicCamera camera;
+    private OrthographicCamera camera;
     private SpriteBatch spriteBatch;
     private final BitmapFont font;
     private final Maze maze;
+    private final HUD hud;
+    private int currentHealth;
+    private float invulnerabilityTimer;
+    private boolean invulnerable;
+    private int keysCollected = 0;
+    private boolean doorUnlocked = false;
+
 
     private float sinusInput = 0f;
 
@@ -32,6 +42,9 @@ public class GameScreen implements Screen {
         this.game = game;
         this.maze = new Maze(level);
         maze.readMoreProperties();
+        hud = new HUD();
+        currentHealth = 5;
+
 
         // Create and configure the camera for the game view
         camera = new OrthographicCamera();
@@ -42,82 +55,205 @@ public class GameScreen implements Screen {
         font = game.getSkin().getFont("font");
     }
 
+    @Override
+    public void show() {
+        spriteBatch = new SpriteBatch();
+
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.position.set(maze.getCharacter().getRectangle().x, maze.getCharacter().getRectangle().y, 0);
+        camera.zoom = 0.5f;
+        camera.update();
+
+    }
+
 
     // Screen interface methods with necessary functionality
     @Override
     public void render(float delta) {
-        // Check for escape key press to go back to the menu
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            game.goToMenu();
+        /**
+         *  match input to functions
+         */
+
+        if (!game.isGamePaused()) {
+            if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
+                game.goToMenu(); // Check for escape key press to go back to the menu
+            if (Gdx.input.isKeyPressed(Input.Keys.H)) currentHealth++;
+            if (currentHealth == 0) {
+                game.goToDefeatScreen();
+            }
+
+            //ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
+            Gdx.gl.glClearColor(0, 0, 0, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+            spriteBatch.setProjectionMatrix(camera.combined);
+
+            spriteBatch.begin();
+
+            //camera.update(); // Update the camera
+
+            // Move text in a circular path to have an example of a moving object
+//            sinusInput += delta;
+//            float textX = (float) (camera.position.x + Math.sin(sinusInput) * 100);
+//            float textY = (float) (camera.position.y + Math.cos(sinusInput) * 100);
+
+            // Set up and begin drawing with the sprite batch
+            //game.getSpriteBatch().setProjectionMatrix(camera.combined);
+
+            //game.getSpriteBatch().begin(); // Important to call this before drawing anything
+
+            // Render the text
+            //font.draw(game.getSpriteBatch(), "Press ESC to go to menu", textX, textY);
+
+            // Draw the character next to the text :) / We can reuse sinusInput here
+            //game.getSpriteBatch().draw(
+                    //game.getCharacterDownAnimation().getKeyFrame(sinusInput, true),
+                    //textX - 96,
+                    //textY - 64,
+                    //64,
+                    //128
+            //);
+            /**
+             * put the correct sprite for walls, entries, and exit points
+             * same for the mobs and traps
+             */
+
+            for (Wall wall : maze.getWalls()) {
+                wall.render(spriteBatch);
+            }
+            maze.getEntrance().render(spriteBatch);
+            for (Exit exit : maze.getExits()) {
+                exit.render(spriteBatch);
+            }
+            for (Trap trap : maze.getTraps()) {
+                trap.render(spriteBatch);
+            }
+            for (Mob mob : maze.getMobs()) {
+                mob.render(spriteBatch);
+            }
+
+            /**
+             * add all keys on the map
+             * make key dissapear, and correctly count when player collects it
+             */
+
+            Iterator<Key> keyIterator = maze.getKeys().iterator();
+            while (keyIterator.hasNext()) {
+                Key key = keyIterator.next();
+
+                if (maze.getCharacter().getRectangle().overlaps(key.getRectangle())) {
+                    keysCollected++;
+                    hud.updateKeys(keysCollected);
+                    if (keysCollected > maze.getKeys().size() * 0.5f) {
+                        doorUnlocked = true;
+                    }
+                    keyIterator.remove();
+                } else {
+                    key.render(spriteBatch);
+                }
+            }
+
+            maze.getCharacter().render(spriteBatch);
+            spriteBatch.end();
+
+            /**
+             * Character and wall collision
+             */
+            for (Wall wall : maze.getWalls()) {
+                if (maze.getCharacter().getRectangle().overlaps(wall.getSides()[2]) && maze.getCharacter().getRectangle().overlaps(wall.getSides()[1])) {
+                    //playOneSound(collisionSound);
+                    maze.getCharacter().setDownLeftInverse(true);
+                } else if (maze.getCharacter().getRectangle().overlaps(wall.getSides()[2]) && maze.getCharacter().getRectangle().overlaps(wall.getSides()[3])) {
+                    //playOneSound(collisionSound);
+                    maze.getCharacter().setDownRightInverse(true);
+                } else if (maze.getCharacter().getRectangle().overlaps(wall.getSides()[0]) && maze.getCharacter().getRectangle().overlaps(wall.getSides()[1])) {
+                    //playOneSound(collisionSound);
+                    maze.getCharacter().setUpLeftInverse(true);
+                } else if (maze.getCharacter().getRectangle().overlaps(wall.getSides()[0]) && maze.getCharacter().getRectangle().overlaps(wall.getSides()[3])) {
+                    //playOneSound(collisionSound);
+                    maze.getCharacter().setUpRightInverse(true);
+                } else if (maze.getCharacter().getRectangle().overlaps(wall.getSides()[0])) {
+                    //playOneSound(collisionSound);
+                    maze.getCharacter().setUpInverse(true);
+                } else if (maze.getCharacter().getRectangle().overlaps(wall.getSides()[1])) {
+                    //playOneSound(collisionSound);
+                    maze.getCharacter().setLeftInverse(true);
+                } else if (maze.getCharacter().getRectangle().overlaps(wall.getSides()[2])) {
+                    //playOneSound(collisionSound);
+                    maze.getCharacter().setDownInverse(true);
+                } else if (maze.getCharacter().getRectangle().overlaps(wall.getSides()[3])) {
+                    //playOneSound(collisionSound);
+                    maze.getCharacter().setRightInverse(true);
+                }
+            }
+
+            maze.getCharacter().update();
+            maze.getCharacter().setDownLeftInverse(false);
+            maze.getCharacter().setDownRightInverse(false);
+            maze.getCharacter().setUpLeftInverse(false);
+            maze.getCharacter().setUpRightInverse(false);
+            maze.getCharacter().setUpInverse(false);
+            maze.getCharacter().setLeftInverse(false);
+            maze.getCharacter().setDownInverse(false);
+            maze.getCharacter().setRightInverse(false);
+
+            /**
+             * if all keys are collected, unlock all exits and allow Character to escape
+             * then open victory screen
+             */
+            if (doorUnlocked) {
+                for (Exit exit : maze.getExits()) {
+                    if (maze.getCharacter().getRectangle().overlaps(exit.getRectangle())) {
+                        //playOneSound(victorySound);
+                        game.goToVictoryScreen();
+                    }
+                }
+            }
+            /**
+             * when Character hits a trap or a mob, give them a short period of invulnerability
+             */
+            for (Trap trap : maze.getTraps()) {
+                if (maze.getCharacter().getRectangle().overlaps(trap.getRectangle())) {
+                    //playTwoSounds(fireSound, takeDamageSound);
+                    invulnerable(2f);
+                }
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+            //game.getSpriteBatch().end(); // Important to call this after drawing everything
+
+
+        }
+    }
+    /**
+     * invulnerability logic added here
+     * @param time
+     */
+    public void invulnerable(float time) {
+        if (!invulnerable) {
+            currentHealth--;
+            invulnerable = true;
         }
 
-        ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
-
-        camera.update(); // Update the camera
-
-        // Move text in a circular path to have an example of a moving object
-        sinusInput += delta;
-        float textX = (float) (camera.position.x + Math.sin(sinusInput) * 100);
-        float textY = (float) (camera.position.y + Math.cos(sinusInput) * 100);
-
-        // Set up and begin drawing with the sprite batch
-        game.getSpriteBatch().setProjectionMatrix(camera.combined);
-
-        game.getSpriteBatch().begin(); // Important to call this before drawing anything
-
-        // Render the text
-        font.draw(game.getSpriteBatch(), "Press ESC to go to menu", textX, textY);
-
-        // Draw the character next to the text :) / We can reuse sinusInput here
-        game.getSpriteBatch().draw(
-                game.getCharacterDownAnimation().getKeyFrame(sinusInput, true),
-                textX - 96,
-                textY - 64,
-                64,
-                128
-        );
-
-        game.getSpriteBatch().end(); // Important to call this after drawing everything
-
-
+        if (invulnerabilityTimer >= time) {
+            invulnerable = false;
+            invulnerabilityTimer = 0f;
+        }
     }
 
-    private void renderMaze() {
-        // Draw walls
-        for (Wall wall : maze.getWalls()) {
-            wall.render(game.getSpriteBatch());
-        }
 
-         // Draw exits
-//        for (Exit exit : maze.getExits()) {
-//            exit.render(game.getSpriteBatch());
-//        }
-//
-//        // Draw traps
-//        for (Trap trap : maze.getTraps()) {
-//            trap.render(game.getSpriteBatch());
-//        }
-//
-//        // Draw mobs
-//        for (Mob mob : maze.getMobs()) {
-//            mob.render(game.getSpriteBatch());
-//        }
-//
-//        // Draw keys
-//        for (Key key : maze.getKeys()) {
-//            key.render(game.getSpriteBatch());
-//        }
 
-        // Draw the player character
-        if (maze.getCharacter() != null) {
-            maze.getCharacter().render(game.getSpriteBatch());
-        }
-
-        // Draw the entrance
-//        if (maze.getEntrance() != null) {
-//            maze.getEntrance().render(game.getSpriteBatch());
-//        }
-    }
 
     @Override
     public void resize(int width, int height) {
@@ -132,10 +268,6 @@ public class GameScreen implements Screen {
     public void resume() {
     }
 
-    @Override
-    public void show() {
-
-    }
 
     @Override
     public void hide() {

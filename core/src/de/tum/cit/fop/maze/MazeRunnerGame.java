@@ -30,6 +30,8 @@ public class MazeRunnerGame extends Game {
     // Character animation downwards
     private Animation<TextureRegion> characterDownAnimation;
 
+    private boolean gamePaused = false;
+
     /**
      * Constructor for MazeRunnerGame.
      *
@@ -100,6 +102,15 @@ public class MazeRunnerGame extends Game {
         this.setScreen(new GameScreen(this, "maps/level-5.properties"));
     }
 
+    //Switches to different game screen through the level
+    public void goToVictoryScreen() {
+    }
+
+    public void goToDefeatScreen() {
+    }
+
+
+
     /**
      * Loads the character animation from the character.png file.
      */
@@ -149,4 +160,18 @@ public class MazeRunnerGame extends Game {
     public SpriteBatch getSpriteBatch() {
         return spriteBatch;
     }
+
+    public boolean isGamePaused() {
+        return gamePaused;
+    }
+
+    public void setGamePaused(boolean gamePaused) {
+        this.gamePaused = gamePaused;
+    }
+
+    public void togglePause() {
+        this.gamePaused = !this.gamePaused;
+    }
+
+
 }
