@@ -92,9 +92,6 @@ public class Maze {
                 break;
             case 4:
                 mobs.add(new Mob(x, y, 2));
-                if (true) {
-                    break;
-                }
                 break;
             case 5:
                 keys.add(new Key(x, y));
@@ -130,5 +127,21 @@ public class Maze {
 
     public List<Key> getKeys() {
         return keys;
+    }
+
+    public float getMapWidth() {
+        return mapWidth;
+    }
+
+    public float getMapHeight() {
+        return mapHeight;
+    }
+
+    public String getMapFile() {
+        return mapFile;
+    }
+
+    public Properties getProperties() {
+        return properties;
     }
 }
