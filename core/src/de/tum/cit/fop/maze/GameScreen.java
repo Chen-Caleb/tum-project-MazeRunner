@@ -321,6 +321,15 @@ public class GameScreen implements Screen {
         camera.update();
     }
 
+    /**
+     * displays the HUD on the screen
+     */
+    public void renderHUD() {
+        hud.getStage().act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        hud.updateHealth(currentHealth);
+        hud.getStage().draw();
+    }
+
 
 
     /**
