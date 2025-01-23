@@ -5,9 +5,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Wall extends StaticObject{
-    private static final TextureRegion WALL_TEXTURE = new TextureRegion(basictiles, 0, 0,width, height);
-    private static final TextureRegion H_MARKER = new TextureRegion(basictiles, 18, 18, 14, 1);
-    private static final TextureRegion V_MARKER = new TextureRegion(basictiles, 18, 18, 1, 7);
+    private static final TextureRegion WALL_TEXTURE = new TextureRegion(basictiles, 64, 0,width, height);
+    //private static final TextureRegion H_MARKER = new TextureRegion(basictiles, 9, 9, 14, 1);
+    //private static final TextureRegion V_MARKER = new TextureRegion(basictiles, 9, 9, 1, 7);
 
     private final Rectangle[] sides = new Rectangle[4];
 
@@ -43,12 +43,12 @@ public class Wall extends StaticObject{
      * Renders the sides as markers.
      * @param spriteBatch the SpriteBatch used for rendering
      */
-    public void renderMarker(SpriteBatch spriteBatch) {
-        spriteBatch.draw(H_MARKER, sides[0].x, sides[0].y);
-        spriteBatch.draw(V_MARKER, sides[1].x, sides[1].y);
-        spriteBatch.draw(H_MARKER, sides[2].x, sides[2].y);
-        spriteBatch.draw(V_MARKER, sides[3].x, sides[3].y);
-    }
+//    public void renderMarker(SpriteBatch spriteBatch) {
+//        spriteBatch.draw(H_MARKER, sides[0].x, sides[0].y);
+//        spriteBatch.draw(V_MARKER, sides[1].x, sides[1].y);
+//        spriteBatch.draw(H_MARKER, sides[2].x, sides[2].y);
+//        spriteBatch.draw(V_MARKER, sides[3].x, sides[3].y);
+//    }
 
     /**
      * Gets the sides for collision detection.
