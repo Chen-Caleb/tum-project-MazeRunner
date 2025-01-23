@@ -31,45 +31,45 @@ public class SelectMapScreen extends ScreenTemplate {
         table.add(titleLabel).padBottom(200).row();
 
         TextButton level1 = new TextButton("Level 1", game.getSkin());
-        level1.addListener(new ClickListener() {
+        level1.addListener(new ChangeListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public void changed(ChangeEvent event, Actor actor) {
                 game.goToGameLevel1();
             }
         });
         table.add(level1).padBottom(10).row();
 
         TextButton level2 = new TextButton("Level 2", game.getSkin());
-        level1.addListener(new ClickListener() {
+        level2.addListener(new ChangeListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public void changed(ChangeEvent event, Actor actor) {
                 game.goToGameLevel2();
             }
         });
         table.add(level2).padBottom(10).row();
 
         TextButton level3 = new TextButton("Level 3", game.getSkin());
-        level1.addListener(new ClickListener() {
+        level3.addListener(new ChangeListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public void changed(ChangeEvent event, Actor actor) {
                 game.goToGameLevel3();
             }
         });
         table.add(level3).padBottom(10).row();
 
         TextButton level4 = new TextButton("Level 4", game.getSkin());
-        level1.addListener(new ClickListener() {
+        level4.addListener(new ChangeListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public void changed(ChangeEvent event, Actor actor) {
                 game.goToGameLevel4();
             }
         });
         table.add(level4).padBottom(10).row();
 
         TextButton level5 = new TextButton("Level 5", game.getSkin());
-        level1.addListener(new ClickListener() {
+        level5.addListener(new ChangeListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public void changed(ChangeEvent event, Actor actor){
                 game.goToGameLevel5();
             }
         });
