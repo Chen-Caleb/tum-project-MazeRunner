@@ -31,6 +31,7 @@ public class GameScreen implements Screen {
     private boolean doorUnlocked = false;
 
 
+
     private float sinusInput = 0f;
 
     /**
@@ -91,29 +92,6 @@ public class GameScreen implements Screen {
 
             spriteBatch.begin();
 
-            //camera.update(); // Update the camera
-
-            // Move text in a circular path to have an example of a moving object
-//            sinusInput += delta;
-//            float textX = (float) (camera.position.x + Math.sin(sinusInput) * 100);
-//            float textY = (float) (camera.position.y + Math.cos(sinusInput) * 100);
-
-            // Set up and begin drawing with the sprite batch
-            //game.getSpriteBatch().setProjectionMatrix(camera.combined);
-
-            //game.getSpriteBatch().begin(); // Important to call this before drawing anything
-
-            // Render the text
-            //font.draw(game.getSpriteBatch(), "Press ESC to go to menu", textX, textY);
-
-            // Draw the character next to the text :) / We can reuse sinusInput here
-            //game.getSpriteBatch().draw(
-                    //game.getCharacterDownAnimation().getKeyFrame(sinusInput, true),
-                    //textX - 96,
-                    //textY - 64,
-                    //64,
-                    //128
-            //);
             /**
              * put the correct sprite for walls, entries, and exit points
              * same for the mobs and traps
@@ -280,25 +258,15 @@ public class GameScreen implements Screen {
                     }
                 }
             }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            renderCamera();
+            hud.updateTimer(delta);
+            renderHUD();
+            invulnerabilityTimer += Gdx.graphics.getDeltaTime();
             //game.getSpriteBatch().end(); // Important to call this after drawing everything
-
-
+        }else {
+            //pauseScreen.show();
+            //pauseScreen.render(delta);
+            //pauseScreen.hide();
         }
     }
     /**

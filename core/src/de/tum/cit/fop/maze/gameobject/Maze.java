@@ -63,7 +63,7 @@ public class Maze {
         try {
             String[] coordinate = propertyName.split(",");
             int x = Integer.parseInt(coordinate[0]) * 16;
-            int y = Integer.parseInt(coordinate[1]) * 16;
+            int y = Integer.parseInt(coordinate[1]) * 16; //element宽距
 
             mapWidth = Math.max(mapWidth, x);
             mapHeight = Math.max(mapHeight, y);
