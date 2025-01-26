@@ -23,10 +23,10 @@ public class Mob extends Human {
         this.rectangle = new Rectangle(position.x, position.y, width, height);
 
         for (int column = 0; column < animationFrames; column++) {
-            walkDownwardsFrames.add(new TextureRegion(mobSheet, (6 + column) * width, 4 * height, width, height));
-            walkLeftwardsFrames.add(new TextureRegion(mobSheet, (6 + column) * width, 5 * height, width, height));
-            walkRightwardsFrames.add(new TextureRegion(mobSheet, (6 + column) * width, 6 * height, width, height));
-            walkUpwardsFrames.add(new TextureRegion(mobSheet, (6 + column) * width, 7 * height, width, height));
+            walkDownwardsFrames.add(new TextureRegion(mobSheet, (11 + column) * width, 0 * height, width, height));
+            walkLeftwardsFrames.add(new TextureRegion(mobSheet, (11 + column) * width, 1 * height, width, height));
+            walkRightwardsFrames.add(new TextureRegion(mobSheet, (11 + column) * width, 2 * height, width, height));
+            walkUpwardsFrames.add(new TextureRegion(mobSheet, (11 + column) * width, 3 * height, width, height));
 
             float frameDuration = 0.25f;
             walkDownAnimation = new Animation<>(frameDuration, walkDownwardsFrames);
@@ -94,19 +94,6 @@ public class Mob extends Human {
         spriteBatch.draw(currentFrame, rectangle.x, rectangle.y);
         update();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     public int getCurrentDirection(){
         return currentDirection;

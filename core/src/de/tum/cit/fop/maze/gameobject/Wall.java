@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Wall extends StaticObject{
-    private static final TextureRegion WALL_TEXTURE = new TextureRegion(basictiles, 64, 0,width, height);
+    private static final TextureRegion WALL_TEXTURE = new TextureRegion(basictiles, 64, 0, width, height);
     //private static final TextureRegion H_MARKER = new TextureRegion(basictiles, 9, 9, 14, 1);
     //private static final TextureRegion V_MARKER = new TextureRegion(basictiles, 9, 9, 1, 7);
 
