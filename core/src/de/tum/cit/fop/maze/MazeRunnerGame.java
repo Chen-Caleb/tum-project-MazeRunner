@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
+import de.tum.cit.fop.maze.screens.DefeatScreen;
+import de.tum.cit.fop.maze.screens.VictoryScreen;
 import games.spooky.gdx.nativefilechooser.NativeFileChooser;
 
 /**
@@ -104,11 +106,13 @@ public class MazeRunnerGame extends Game {
         this.setScreen(new GameScreen(this, "maps/level-5.properties"));
     }
 
-    //Switches to different game screen through the level
+
     public void goToVictoryScreen() {
+        this.setScreen(new VictoryScreen(this));
     }
 
     public void goToDefeatScreen() {
+        this.setScreen(new DefeatScreen(this));
     }
 
 

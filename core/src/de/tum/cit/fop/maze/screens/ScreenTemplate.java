@@ -1,14 +1,14 @@
-package de.tum.cit.fop.maze.screensInMenu;
+package de.tum.cit.fop.maze.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import de.tum.cit.fop.maze.MazeRunnerGame;
@@ -19,11 +19,13 @@ public abstract class ScreenTemplate implements Screen {
     protected float width = Gdx.graphics.getWidth();
     protected float height = Gdx.graphics.getHeight();
     protected Table table;
+    protected Texture background;
+    protected SpriteBatch spriteBatch;
+
 
     protected ScreenTemplate(MazeRunnerGame game) {
         this.game = game;
         stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-
     }
 
 
@@ -38,10 +40,29 @@ public abstract class ScreenTemplate implements Screen {
         table.add(returnToMenu).padBottom(10).row();
     }
 
+    public void playAgain() {
+        TextButton returnToMenu = new TextButton("play again", game.getSkin());
+        returnToMenu.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new SelectMapScreen(game));
+            }
+        });
+        table.add(returnToMenu).padBottom(10).row();
+    }
+
 
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
+
+        table = new Table();
+        table.setFillParent(true);
+
+
+        table.setPosition(table.getX(),-Gdx.graphics.getHeight() * 0.05f);
+        stage.addActor(table);
+
     }
 
     @Override
@@ -76,9 +97,14 @@ public abstract class ScreenTemplate implements Screen {
         stage.dispose(); // 释放舞台资源
     }
 
-    public void initialTable(){
-        table = new Table();
-        table.setFillParent(true);
-        stage.addActor(table);
+    public void initialTable() {
+        if (table == null) {
+            System.out.println("Initializing table...");
+            table = new Table();
+            table.setFillParent(true);
+            stage.addActor(table);
+        } else {
+            System.out.println("Table is already initialized.");
+        }
     }
 }

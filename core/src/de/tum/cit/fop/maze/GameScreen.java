@@ -24,12 +24,11 @@ public class GameScreen implements Screen {
     private final BitmapFont font;
     private final Maze maze;
     private final HUD hud;
-    private int currentHealth;
+    public int currentHealth;
     private float invulnerabilityTimer;
     private boolean invulnerable;
     private int keysCollected = 0;
     private boolean doorUnlocked = false;
-
 
 
     private float sinusInput = 0f;
@@ -79,7 +78,6 @@ public class GameScreen implements Screen {
         if (!game.isGamePaused()) {
             if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
                 game.goToMenu(); // Check for escape key press to go back to the menu
-            if (Gdx.input.isKeyPressed(Input.Keys.H)) currentHealth++;
             if (currentHealth == 0) {
                 game.goToDefeatScreen();
             }
@@ -123,7 +121,7 @@ public class GameScreen implements Screen {
                 if (maze.getCharacter().getRectangle().overlaps(key.getRectangle())) {
                     keysCollected++;
                     hud.updateKeys(keysCollected);
-                    if (keysCollected > maze.getKeys().size() * 0.5f) {
+                    if (keysCollected >= 1) {
                         doorUnlocked = true;
                     }
                     keyIterator.remove();
