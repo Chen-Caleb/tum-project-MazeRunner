@@ -15,6 +15,8 @@ public class DefeatScreen extends GameOverScreen{
     @Override
     public void show() {
         super.show();
+        returnToMenu(); // 添加返回菜单按钮
+        playAgain(); // 添加重玩按钮
 
     }
 

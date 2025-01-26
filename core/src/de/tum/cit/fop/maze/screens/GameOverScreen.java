@@ -15,14 +15,7 @@ public abstract class GameOverScreen extends ScreenTemplate{
     protected int playerScore;
     protected String score;
 
-    protected GlyphLayout titleLayout;
-    protected GlyphLayout textLayout;
-    protected GlyphLayout scoreLayout;
 
-    protected BitmapFont titleFont;
-    protected BitmapFont victoryFont;
-    protected float titleWidth;
-    protected float textWidth;
 
     protected GameOverScreen(MazeRunnerGame game) {
         super(game);

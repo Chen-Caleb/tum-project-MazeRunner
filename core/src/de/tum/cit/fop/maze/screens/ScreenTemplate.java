@@ -4,9 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -21,11 +24,33 @@ public abstract class ScreenTemplate implements Screen {
     protected Table table;
     protected Texture background;
     protected SpriteBatch spriteBatch;
+    protected final Skin skin;
+
+    protected GlyphLayout titleLayout;
+    protected GlyphLayout textLayout;
+    protected GlyphLayout scoreLayout;
+
+    protected BitmapFont titleFont;
+    protected BitmapFont victoryFont;
+    protected float titleWidth;
+    protected float textWidth;
 
 
     protected ScreenTemplate(MazeRunnerGame game) {
         this.game = game;
         stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        skin = new Skin(Gdx.files.internal("craft/craftacular-ui.json"));
+
+
+        titleFont = skin.getFont("title");
+        int titleFontSize = 96;
+        titleFont.getData().setScale(titleFontSize / titleFont.getCapHeight());
+
+        victoryFont = skin.getFont("title");
+        int victoryFontSize = 36;
+        victoryFont.getData().setScale(victoryFontSize / victoryFont.getCapHeight());
+
+
     }
 
 

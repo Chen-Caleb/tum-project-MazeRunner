@@ -69,14 +69,6 @@ public class SelectMapScreen extends ScreenTemplate {
         });
         table.add(level5).padBottom(10).row();
 
-        TextButton victory = new TextButton("victory", game.getSkin());
-        victory.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor){
-                game.goToVictoryScreen();
-            }
-        });
-        table.add(victory).padBottom(10).row();
 
         returnToMenu();
 
