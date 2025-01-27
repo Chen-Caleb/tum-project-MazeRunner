@@ -99,7 +99,7 @@ public class HUD {
      * @param delta indicates how much time has passed
      */
     public void updateTimer(float delta) {
-        elapsedTime += delta * 100;
+        elapsedTime += delta;
         timer.setText("Time: " + (int) elapsedTime);
     }
 
