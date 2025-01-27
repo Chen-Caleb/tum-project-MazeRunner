@@ -130,8 +130,25 @@ public class GameScreen implements Screen {
                 }
             }
 
+            Iterator<Heart> heartIterator = maze.getHearts().iterator();
+            while (heartIterator.hasNext()) {
+                Heart heart = heartIterator.next();
+
+                if (maze.getCharacter().getRectangle().overlaps(heart.getRectangle())) {
+                    invulnerableForHeart(2f);
+                    heartIterator.remove();
+                } else {
+                    heart.render(spriteBatch);
+                }
+            }
+
             maze.getCharacter().render(spriteBatch);
             spriteBatch.end();
+
+
+
+
+
 
             /**
              * Character and wall collision
@@ -275,23 +292,24 @@ public class GameScreen implements Screen {
         camera.position.x = maze.getCharacter().getRectangle().x;
         camera.position.y = maze.getCharacter().getRectangle().y;
 
-        float zoomX = Gdx.graphics.getWidth() / maze.getMapWidth() * 2f;
-        float zoomY = Gdx.graphics.getHeight() / maze.getMapHeight() * 2f;
+        float zoomX = Gdx.graphics.getWidth() / maze.getMapWidth() ;
+        float zoomY = Gdx.graphics.getHeight() / maze.getMapHeight() ;
         float zoom = Math.min(zoomX, zoomY);
         if (Gdx.input.isKeyPressed(Input.Keys.M)) {
-            camera.zoom = zoom / 3f;
+            camera.zoom = zoom / 3f; // 地图缩小，显示更多地形
             camera.position.set(maze.getMapWidth() / 2, maze.getMapHeight() / 2, 0);
         } else {
-            camera.zoom = 0.25f;
+            camera.zoom = 0.2f;
         }
         camera.update();
     }
+
 
     /**
      * displays the HUD on the screen
      */
     public void renderHUD() {
-        hud.getStage().act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        hud.getStage().act(Math.min(Gdx.graphics.getDeltaTime(), 1000 ));
         hud.updateHealth(currentHealth);
         hud.getStage().draw();
     }
@@ -305,6 +323,18 @@ public class GameScreen implements Screen {
     public void invulnerable(float time) {
         if (!invulnerable) {
             currentHealth--;
+            invulnerable = true;
+        }
+
+        if (invulnerabilityTimer >= time) {
+            invulnerable = false;
+            invulnerabilityTimer = 0f;
+        }
+    }
+
+    public void invulnerableForHeart(float time) {
+        if (!invulnerable) {
+            currentHealth++;
             invulnerable = true;
         }
 
