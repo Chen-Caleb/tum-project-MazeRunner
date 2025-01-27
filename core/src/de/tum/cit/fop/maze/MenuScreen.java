@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.tum.cit.fop.maze.screens.InstructionsScreen;
 import de.tum.cit.fop.maze.screens.SelectMapScreen;
+import de.tum.cit.fop.maze.screens.StoryScreen;
 
 /**
  * The MenuScreen class is responsible for displaying the main menu of the game.
@@ -78,6 +79,17 @@ public class MenuScreen implements Screen {
             }
         });
         table.add(instructionsButton).width(300).padBottom(10).row();
+
+
+        //Creat readMe Button
+        TextButton readMeButton = new TextButton("Read Me", game.getSkin());
+        readMeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new StoryScreen(game));
+            }
+        });
+        table.add(readMeButton).width(300).padBottom(20).row();
 
 
     }
