@@ -16,6 +16,8 @@ public class Maze {
     private List<Trap> traps = new ArrayList<>();
     private List<Mob> mobs = new ArrayList<>();
     private List<Key> keys = new ArrayList<>();
+    private List<Heart> hearts = new ArrayList<>();
+
 
     private final String mapFile;
     private Properties properties;
@@ -96,6 +98,9 @@ public class Maze {
             case 5:
                 keys.add(new Key(x, y));
                 break;
+            case 6:
+                hearts.add(new Heart(x, y));
+                break;
             default:
                 System.err.println("Unknown element type: " + value);
         }
@@ -135,6 +140,10 @@ public class Maze {
 
     public float getMapHeight() {
         return mapHeight;
+    }
+
+    public List<Heart> getHearts() {
+        return hearts;
     }
 
     public String getMapFile() {

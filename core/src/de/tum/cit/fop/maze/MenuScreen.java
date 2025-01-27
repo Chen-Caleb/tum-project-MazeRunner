@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import de.tum.cit.fop.maze.screens.InstructionsScreen;
 import de.tum.cit.fop.maze.screens.SelectMapScreen;
 
 /**
@@ -67,6 +68,16 @@ public class MenuScreen implements Screen {
         });
 
         table.add(exitButton).width(300).padBottom(10).row();
+
+        //Creat instruction Button
+        TextButton instructionsButton = new TextButton("Instruction", game.getSkin());
+        instructionsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new InstructionsScreen(game));
+            }
+        });
+        table.add(instructionsButton).width(300).padBottom(10).row();
 
 
     }
