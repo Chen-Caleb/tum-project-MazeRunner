@@ -139,6 +139,7 @@ public class Character extends Human {
             playerMoveRightwards();
             playerMoveUpwards();
             playerMoveLeftwards();
+        }
 
             //attack Animations
             if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && Gdx.input.isKeyPressed(Input.Keys.A)) {
@@ -189,7 +190,7 @@ public class Character extends Human {
                     rectangle.x -= runningSpeed;
                 }
             }
-        }
+
 
     }
 

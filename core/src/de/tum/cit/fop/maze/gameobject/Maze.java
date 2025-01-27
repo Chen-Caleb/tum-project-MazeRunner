@@ -91,7 +91,7 @@ public class Maze {
                 traps.add(new Trap(x, y));
                 break;
             case 4:
-                mobs.add(new Mob(x, y, 2));
+                mobs.add(new Mob(x, y, 2f, character));
                 break;
             case 5:
                 keys.add(new Key(x, y));
