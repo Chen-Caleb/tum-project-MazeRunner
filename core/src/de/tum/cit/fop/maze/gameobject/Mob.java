@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 public class Mob extends Human {
     protected final Texture mobSheet = new Texture(Gdx.files.internal("mobs.png"));
@@ -17,76 +18,86 @@ public class Mob extends Human {
     private float movementInterval;
     private float directionInterval;
 
-    public Mob(float x, float y, float speed) {
+
+    private final Character character; // 引用主角
+
+    public Mob(float x, float y, float speed, Character character) {
         super(x, y, speed);
-        int animationFrames = 3;
+        this.character = character;
+        this.width = 16;
+        this.height = 16;
         this.rectangle = new Rectangle(position.x, position.y, width, height);
 
-        for (int column = 0; column < animationFrames; column++) {
-            walkDownwardsFrames.add(new TextureRegion(mobSheet, (11 + column) * width, 0 * height, width, height));
-            walkLeftwardsFrames.add(new TextureRegion(mobSheet, (11 + column) * width, 1 * height, width, height));
-            walkRightwardsFrames.add(new TextureRegion(mobSheet, (11 + column) * width, 2 * height, width, height));
-            walkUpwardsFrames.add(new TextureRegion(mobSheet, (11 + column) * width, 3 * height, width, height));
-
-            float frameDuration = 0.25f;
-            walkDownAnimation = new Animation<>(frameDuration, walkDownwardsFrames);
-            walkRightAnimation = new Animation<>(frameDuration, walkRightwardsFrames);
-            walkUpAnimation = new Animation<>(frameDuration, walkUpwardsFrames);
-            walkLeftAnimation = new Animation<>(frameDuration, walkLeftwardsFrames);
-
-            currentAnimation = walkDownAnimation;
-            stateTime = 0f;
-
-            currentDirection = MathUtils.random(0, 3);
-            elapsedTimeForDirection = 0f;
-            elapsedTimeForMovement = 0f;
-            movementInterval = 0.1f;
-            directionInterval = 5f;
+        for (int column = 9; column <= 11; column++) {
+            walkDownwardsFrames.add(new TextureRegion(mobSheet, column * width, 4 * height, width, height));
+            walkLeftwardsFrames.add(new TextureRegion(mobSheet, column * width, 5 * height, width, height));
+            walkRightwardsFrames.add(new TextureRegion(mobSheet, column * width, 6 * height, width, height));
+            walkUpwardsFrames.add(new TextureRegion(mobSheet, column * width, 7 * height, width, height));
         }
+
+
+        float frameDuration = 0.15f;
+        walkDownAnimation = new Animation<>(frameDuration, walkDownwardsFrames);
+        walkRightAnimation = new Animation<>(frameDuration, walkRightwardsFrames);
+        walkUpAnimation = new Animation<>(frameDuration, walkUpwardsFrames);
+        walkLeftAnimation = new Animation<>(frameDuration, walkLeftwardsFrames);
+
+        currentAnimation = walkDownAnimation;
+        stateTime = 0f;
+
+        currentDirection = MathUtils.random(0, 3);
+        elapsedTimeForDirection = 0f;
+        elapsedTimeForMovement = 0f;
+        movementInterval = 0.2f;
+        directionInterval = 5f;
+
     }
 
-        public void update() {
-            elapsedTimeForMovement += Gdx.graphics.getDeltaTime();
-            elapsedTimeForDirection += Gdx.graphics.getDeltaTime();
-            directionInterval = MathUtils.random(4, 8);
+    public void update() {
+        elapsedTimeForMovement += Gdx.graphics.getDeltaTime();
+        elapsedTimeForDirection += Gdx.graphics.getDeltaTime();
+        directionInterval = MathUtils.random(4, 8);
 
-            if (elapsedTimeForDirection >= directionInterval) {
-                currentDirection = MathUtils.random(0, 3);
-                elapsedTimeForDirection = 0f;
-            }
-
-            if (elapsedTimeForMovement >= movementInterval) {
-                move(currentDirection);
-                elapsedTimeForMovement = 0f;
-            }
-            stateTime += Gdx.graphics.getDeltaTime();
+        if (elapsedTimeForDirection >= directionInterval) {
+            currentDirection = MathUtils.random(0, 3);
+            elapsedTimeForDirection = 0f;
         }
 
-        /**
-         * movement logic, and plays correct animation for each direction
-         * @param randomDirection
-         */
-        public void move(int randomDirection){
-            switch (randomDirection) {
-                case 0:
-                    currentAnimation = walkDownAnimation;
-                    rectangle.y -= speed;
-                    break;
-                case 1:
-                    currentAnimation = walkLeftAnimation;
-                    rectangle.x -= speed;
-                    break;
-                case 2:
-                    currentAnimation = walkRightAnimation;
-                    rectangle.x += speed;
-                    break;
-                case 3:
-                    currentAnimation = walkUpAnimation;
-                    rectangle.y += speed;
-                    break;
-            }
-            stateTime = 0f;
+        if (elapsedTimeForMovement >= movementInterval) {
+            move(currentDirection);
+            elapsedTimeForMovement = 0f;
         }
+        stateTime += Gdx.graphics.getDeltaTime();
+
+
+    }
+
+    /**
+     * movement logic, and plays correct animation for each direction
+     *
+     * @param direction
+     */
+    public void move(int direction) {
+        switch (direction) {
+            case 0:
+                currentAnimation = walkDownAnimation;
+                rectangle.y -= speed;
+                break;
+            case 1:
+                currentAnimation = walkLeftAnimation;
+                rectangle.x -= speed;
+                break;
+            case 2:
+                currentAnimation = walkRightAnimation;
+                rectangle.x += speed;
+                break;
+            case 3:
+                currentAnimation = walkUpAnimation;
+                rectangle.y += speed;
+                break;
+        }
+        stateTime = 0f;
+    }
 
     @Override
     public void render(SpriteBatch spriteBatch) {
@@ -95,7 +106,7 @@ public class Mob extends Human {
         update();
     }
 
-    public int getCurrentDirection(){
+    public int getCurrentDirection() {
         return currentDirection;
     }
 }

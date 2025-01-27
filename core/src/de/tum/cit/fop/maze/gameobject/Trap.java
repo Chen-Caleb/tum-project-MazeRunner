@@ -12,7 +12,9 @@ public class Trap extends StaticObject{
 
     public Trap(float x, float y) {
         super(x, y);
-        rectangle = new Rectangle(position.x, position.y, width, height);
+        this.width = 16;
+        this.height = 16;
+        this.rectangle = new Rectangle(position.x, position.y, width, height);
 
         int animationFrames = 7;
 
@@ -29,6 +31,6 @@ public class Trap extends StaticObject{
     public void render(SpriteBatch spriteBatch) {
         stateTime += Gdx.graphics.getDeltaTime();
         TextureRegion currentFrame = trapAnimation.getKeyFrame(stateTime, true);
-        spriteBatch.draw(currentFrame, rectangle.x, rectangle.y);
+        spriteBatch.draw(currentFrame, this.rectangle.x, this.rectangle.y);
     }
 }
