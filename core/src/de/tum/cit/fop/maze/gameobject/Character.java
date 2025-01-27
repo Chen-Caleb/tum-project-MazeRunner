@@ -13,7 +13,6 @@ import com.badlogic.gdx.utils.Array;
 public class Character extends Human {
     protected float runningSpeed;
     protected final Texture characterSheet = new Texture(Gdx.files.internal("character.png"));
-    protected int NumberOfDirections = 4;
 
     private boolean upInverse, leftInverse, downInverse, rightInverse;
     private boolean upLeftInverse, upRightInverse, downLeftInverse, downRightInverse;
@@ -32,6 +31,20 @@ public class Character extends Human {
     protected Animation<TextureRegion> characterUpRunningAnimation;
     protected Animation<TextureRegion> characterLeftRunningAnimation;
 
+    /**
+     * Attack animation
+     */
+    protected Array<TextureRegion> AttackDownwardsFrames = new Array<>(TextureRegion.class);
+    protected Array<TextureRegion> AttackRightwardsFrames = new Array<>(TextureRegion.class);
+    protected Array<TextureRegion> AttackUpwardsFrames = new Array<>(TextureRegion.class);
+    protected Array<TextureRegion> AttackLeftwardsFrames = new Array<>(TextureRegion.class);
+
+    // Attack animations
+    protected Animation<TextureRegion> characterDownAttackAnimation;
+    protected Animation<TextureRegion> characterRightAttackAnimation;
+    protected Animation<TextureRegion> characterUpAttackAnimation;
+    protected Animation<TextureRegion> characterLeftAttackAnimation;
+
 
     public Character(float x, float y, float speed, float runningSpeed) {
         super(x, y, speed);
@@ -44,6 +57,7 @@ public class Character extends Human {
         /**
          * animation logic
          */
+        int NumberOfDirections = 4;
         for (int column = 0; column < NumberOfDirections; column++) {
             walkDownwardsFrames.add(new TextureRegion(characterSheet, column * Character.width, 0, Character.width, Character.height));
             walkRightwardsFrames.add(new TextureRegion(characterSheet, column * Character.width, Character.height, Character.width, Character.height));
@@ -55,13 +69,18 @@ public class Character extends Human {
             runUpwardsFrames.add(new TextureRegion(characterSheet, (9 + column) * width, 2 * height, width, height));
             runLeftwardsFrames.add(new TextureRegion(characterSheet, (9 + column) * width, 3 * height, width, height));
 
+            AttackDownwardsFrames.add(new TextureRegion(characterSheet, column * 17 + 7, 4 * height, width, height));
+            AttackUpwardsFrames.add(new TextureRegion(characterSheet, column * 17 + 7, 5 * height,width, height));
+            AttackRightwardsFrames.add(new TextureRegion(characterSheet, column * 17 +7, 6 * height, width, height));
+            AttackLeftwardsFrames.add(new TextureRegion(characterSheet, column * 17 + 7, 7 * height, width, height));
+
 
         }
 
         /**
          * gets the correct frames for animation
          */
-        float frameDuration = 0.1f;
+        float frameDuration = 0.15f;
         walkDownAnimation = new Animation<>(frameDuration, walkDownwardsFrames);
         walkRightAnimation = new Animation<>(frameDuration, walkRightwardsFrames);
         walkUpAnimation = new Animation<>(frameDuration, walkUpwardsFrames);
@@ -70,10 +89,16 @@ public class Character extends Human {
         currentAnimation = walkDownAnimation;
         stateTime = 0f;
 
-        characterDownRunningAnimation = new Animation<>(0.1f, runDownwardsFrames);
-        characterRightRunningAnimation = new Animation<>(0.1f, runRightwardsFrames);
-        characterUpRunningAnimation = new Animation<>(0.1f, runUpwardsFrames);
-        characterLeftRunningAnimation = new Animation<>(0.1f, runLeftwardsFrames);
+        characterDownRunningAnimation = new Animation<>(frameDuration, runDownwardsFrames);
+        characterRightRunningAnimation = new Animation<>(frameDuration, runRightwardsFrames);
+        characterUpRunningAnimation = new Animation<>(frameDuration, runUpwardsFrames);
+        characterLeftRunningAnimation = new Animation<>(frameDuration, runLeftwardsFrames);
+
+        characterDownAttackAnimation =new Animation<>(0.1f, AttackDownwardsFrames);
+        characterRightAttackAnimation =new Animation<>(0.1f, AttackRightwardsFrames);
+        characterUpAttackAnimation =new Animation<>(0.1f, AttackUpwardsFrames);
+        characterLeftAttackAnimation =new Animation<>(0.1f, AttackLeftwardsFrames);
+
 
         currentAnimation = walkDownAnimation;
         stateTime = 0f;
@@ -115,6 +140,26 @@ public class Character extends Human {
             playerMoveUpwards();
             playerMoveLeftwards();
 
+            //attack Animations
+            if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && Gdx.input.isKeyPressed(Input.Keys.A)) {
+                currentAnimation = characterDownAttackAnimation;
+                rectangle.y -= speed * 0.01f;
+
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && Gdx.input.isKeyPressed(Input.Keys.A)) {
+                currentAnimation = characterRightAttackAnimation;
+                rectangle.x += speed * 0.01f;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.UP) && Gdx.input.isKeyPressed(Input.Keys.A)) {
+                currentAnimation = characterUpAttackAnimation;
+                rectangle.y += speed * 0.01f;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && Gdx.input.isKeyPressed(Input.Keys.A)) {
+                currentAnimation = characterLeftAttackAnimation;
+                rectangle.x -= speed * 0.01f;
+            }
+
+
 
             // running Animations
             /**
@@ -126,19 +171,19 @@ public class Character extends Human {
                     rectangle.y -= runningSpeed;
                 }
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                 if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
                     currentAnimation = characterRightRunningAnimation;
                     rectangle.x += runningSpeed;
                 }
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
                 if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
                     currentAnimation = characterUpRunningAnimation;
                     rectangle.y += runningSpeed;
                 }
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
                     currentAnimation = characterLeftRunningAnimation;
                     rectangle.x -= runningSpeed;
