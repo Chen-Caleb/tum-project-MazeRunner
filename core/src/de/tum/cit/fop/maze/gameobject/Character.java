@@ -314,65 +314,40 @@ public class Character extends Human {
         spriteBatch.draw(currentFrame, this.rectangle.x, this.rectangle.y);
     }
 
-    public boolean isUpInverse() {
-        return upInverse;
-    }
-
     public void setUpInverse(boolean upInverse) {
         this.upInverse = upInverse;
     }
 
-    public boolean isLeftInverse() {
-        return leftInverse;
-    }
 
     public void setLeftInverse(boolean leftInverse) {
         this.leftInverse = leftInverse;
     }
 
-    public boolean isDownInverse() {
-        return downInverse;
-    }
 
     public void setDownInverse(boolean downInverse) {
         this.downInverse = downInverse;
     }
 
-    public boolean isRightInverse() {
-        return rightInverse;
-    }
 
     public void setRightInverse(boolean rightInverse) {
         this.rightInverse = rightInverse;
     }
 
-    public boolean isUpLeftInverse() {
-        return upLeftInverse;
-    }
 
     public void setUpLeftInverse(boolean upLeftInverse) {
         this.upLeftInverse = upLeftInverse;
     }
 
-    public boolean isUpRightInverse() {
-        return upRightInverse;
-    }
 
     public void setUpRightInverse(boolean upRightInverse) {
         this.upRightInverse = upRightInverse;
     }
 
-    public boolean isDownLeftInverse() {
-        return downLeftInverse;
-    }
 
     public void setDownLeftInverse(boolean downLeftInverse) {
         this.downLeftInverse = downLeftInverse;
     }
 
-    public boolean isDownRightInverse() {
-        return downRightInverse;
-    }
 
     public void setDownRightInverse(boolean downRightInverse) {
         this.downRightInverse = downRightInverse;
