@@ -45,6 +45,20 @@ public class Character extends Human {
     protected Animation<TextureRegion> characterUpAttackAnimation;
     protected Animation<TextureRegion> characterLeftAttackAnimation;
 
+    /**
+     * jumping animation
+     */
+    protected Array<TextureRegion> jumpDownwardsFrames = new Array<>(TextureRegion.class);
+    protected Array<TextureRegion> jumpRightwardsFrames = new Array<>(TextureRegion.class);
+    protected Array<TextureRegion> jumpUpwardsFrames = new Array<>(TextureRegion.class);
+    protected Array<TextureRegion> jumpLeftwardsFrames = new Array<>(TextureRegion.class);
+    // jumping animations
+    protected Animation<TextureRegion> characterJumpDownAnimation;
+    protected Animation<TextureRegion> characterJumpRightAnimation;
+    protected Animation<TextureRegion> characterJumpUpAnimation;
+    protected Animation<TextureRegion> characterJumpLeftAnimation;
+
+
 
     public Character(float x, float y, float speed, float runningSpeed) {
         super(x, y, speed);
@@ -69,12 +83,17 @@ public class Character extends Human {
             runUpwardsFrames.add(new TextureRegion(characterSheet, (9 + column) * width, 2 * height, width, height));
             runLeftwardsFrames.add(new TextureRegion(characterSheet, (9 + column) * width, 3 * height, width, height));
 
-            AttackDownwardsFrames.add(new TextureRegion(characterSheet, column * 17 + 7, 4 * height, width, height));
-            AttackUpwardsFrames.add(new TextureRegion(characterSheet, column * 17 + 7, 5 * height,width, height));
-            AttackRightwardsFrames.add(new TextureRegion(characterSheet, column * 17 +7, 6 * height, width, height));
-            AttackLeftwardsFrames.add(new TextureRegion(characterSheet, column * 17 + 7, 7 * height, width, height));
+            AttackDownwardsFrames.add(new TextureRegion(characterSheet, column * 32 + 7, 4 * height, 20, height));
+            AttackUpwardsFrames.add(new TextureRegion(characterSheet, column * 32 + 7, 5 * height,20, height));
+            AttackRightwardsFrames.add(new TextureRegion(characterSheet, column * 32 +7, 6 * height, 20, height));
+            AttackLeftwardsFrames.add(new TextureRegion(characterSheet, column * 32 + 7, 7 * height, 20, height));
 
-
+        }
+        for (int column = 0; column < 3; column++) {
+            jumpDownwardsFrames.add(new TextureRegion(characterSheet, (5 + column) * width, 0, width, height));
+            jumpRightwardsFrames.add(new TextureRegion(characterSheet, (5 + column) * width, height, width, height));
+            jumpUpwardsFrames.add(new TextureRegion(characterSheet, (5+ column) * width, 2 * height, width, height));
+            jumpLeftwardsFrames.add(new TextureRegion(characterSheet, (5 + column) * width, 3 * height, width, height));
         }
 
         /**
@@ -94,10 +113,15 @@ public class Character extends Human {
         characterUpRunningAnimation = new Animation<>(frameDuration, runUpwardsFrames);
         characterLeftRunningAnimation = new Animation<>(frameDuration, runLeftwardsFrames);
 
-        characterDownAttackAnimation =new Animation<>(0.1f, AttackDownwardsFrames);
-        characterRightAttackAnimation =new Animation<>(0.1f, AttackRightwardsFrames);
-        characterUpAttackAnimation =new Animation<>(0.1f, AttackUpwardsFrames);
-        characterLeftAttackAnimation =new Animation<>(0.1f, AttackLeftwardsFrames);
+        characterDownAttackAnimation =new Animation<>(0.05f, AttackDownwardsFrames);
+        characterRightAttackAnimation =new Animation<>(0.05f, AttackRightwardsFrames);
+        characterUpAttackAnimation =new Animation<>(0.05f, AttackUpwardsFrames);
+        characterLeftAttackAnimation =new Animation<>(0.05f, AttackLeftwardsFrames);
+
+        characterJumpDownAnimation = new Animation<>(0.1f, jumpDownwardsFrames);
+        characterJumpRightAnimation = new Animation<>(0.1f, jumpRightwardsFrames);
+        characterJumpUpAnimation = new Animation<>(0.1f, jumpUpwardsFrames);
+        characterJumpLeftAnimation = new Animation<>(0.1f, jumpLeftwardsFrames);
 
 
         currentAnimation = walkDownAnimation;
@@ -190,6 +214,27 @@ public class Character extends Human {
                     rectangle.x -= runningSpeed;
                 }
             }
+
+        /**
+         * jumping logic; animation + movement
+         */
+        // jumping
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            currentAnimation = characterJumpDownAnimation;
+            rectangle.y -= speed * 0.25f;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            currentAnimation = characterJumpRightAnimation;
+            rectangle.x += speed * 0.25f;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.UP) && Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            currentAnimation = characterJumpUpAnimation;
+            rectangle.y += speed * 0.25f;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            currentAnimation = characterJumpLeftAnimation;
+            rectangle.x -= speed * 0.25f;
+        }
 
 
     }

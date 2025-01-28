@@ -142,6 +142,10 @@ public class GameScreen implements Screen {
                 }
             }
 
+            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+                invulnerableForAttack(1f);
+            }
+
             maze.getCharacter().render(spriteBatch);
             spriteBatch.end();
 
@@ -335,6 +339,17 @@ public class GameScreen implements Screen {
     public void invulnerableForHeart(float time) {
         if (!invulnerable) {
             currentHealth++;
+            invulnerable = true;
+        }
+
+        if (invulnerabilityTimer >= time) {
+            invulnerable = false;
+            invulnerabilityTimer = 0f;
+        }
+    }
+
+    public void invulnerableForAttack(float time) {
+        if (!invulnerable) {
             invulnerable = true;
         }
 

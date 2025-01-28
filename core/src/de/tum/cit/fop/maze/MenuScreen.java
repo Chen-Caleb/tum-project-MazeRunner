@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -25,6 +26,7 @@ import de.tum.cit.fop.maze.screens.StoryScreen;
 public class MenuScreen implements Screen {
 
     private final Stage stage;
+    protected Texture background;
 
     /**
      * Constructor for MenuScreen. Sets up the camera, viewport, stage, and UI elements.
