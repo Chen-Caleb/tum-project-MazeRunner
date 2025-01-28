@@ -14,7 +14,7 @@ public class Trap extends StaticObject{
         super(x, y);
         this.width = 16;
         this.height = 16;
-        this.rectangle = new Rectangle(position.x, position.y, width, height);
+        this.rectangle = new Rectangle(position.x, position.y, width /2, height/2);
 
         int animationFrames = 7;
 

@@ -26,7 +26,7 @@ public class Mob extends Human {
         this.character = character;
         this.width = 16;
         this.height = 16;
-        this.rectangle = new Rectangle(position.x, position.y, width, height);
+        this.rectangle = new Rectangle(position.x, position.y, width / 2, height / 2);
 
         for (int column = 9; column <= 11; column++) {
             walkDownwardsFrames.add(new TextureRegion(mobSheet, column * width, 4 * height, width, height));
