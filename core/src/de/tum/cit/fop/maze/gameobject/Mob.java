@@ -26,9 +26,9 @@ public class Mob extends Human {
         this.character = character;
         this.width = 16;
         this.height = 16;
-        this.rectangle = new Rectangle(position.x, position.y, width / 2, height / 2);
+        this.rectangle = new Rectangle(position.x, position.y, 14, 14);
 
-        for (int column = 9; column <= 11; column++) {
+        for (int column = 6; column <= 9; column++) {
             walkDownwardsFrames.add(new TextureRegion(mobSheet, column * width, 4 * height, width, height));
             walkLeftwardsFrames.add(new TextureRegion(mobSheet, column * width, 5 * height, width, height));
             walkRightwardsFrames.add(new TextureRegion(mobSheet, column * width, 6 * height, width, height));
@@ -36,7 +36,7 @@ public class Mob extends Human {
         }
 
 
-        float frameDuration = 0.15f;
+        float frameDuration = 0.2f;
         walkDownAnimation = new Animation<>(frameDuration, walkDownwardsFrames);
         walkRightAnimation = new Animation<>(frameDuration, walkRightwardsFrames);
         walkUpAnimation = new Animation<>(frameDuration, walkUpwardsFrames);
