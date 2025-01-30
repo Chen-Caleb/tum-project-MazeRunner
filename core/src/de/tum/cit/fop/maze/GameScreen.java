@@ -3,11 +3,12 @@ package de.tum.cit.fop.maze;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
 import de.tum.cit.fop.maze.gameobject.*;
 
 import java.util.Iterator;
@@ -30,8 +31,10 @@ public class GameScreen implements Screen {
     private int keysCollected = 0;
     private boolean doorUnlocked = false;
 
+    private Music backgroundMusic;
+    private Sound fireSound, ghostSound, takeDamageSound, collisionSound, keySound, heartSound , victorySound, defeatSound;
+    private float soundTimer;
 
-    private float sinusInput = 0f;
 
     /**
      * Constructor for GameScreen. Sets up the camera and font.
@@ -53,6 +56,7 @@ public class GameScreen implements Screen {
 
         // Get the font from the game's skin
         font = game.getSkin().getFont("font");
+
     }
 
     @Override
@@ -65,12 +69,29 @@ public class GameScreen implements Screen {
         camera.zoom = 0.5f;
         camera.update();
 
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("dungeon.wav"));
+        backgroundMusic.setLooping(true);
+        backgroundMusic.setVolume(0.3f);
+        backgroundMusic.play();
+
+        fireSound = Gdx.audio.newSound(Gdx.files.internal("sound/fire.wav"));
+        ghostSound = Gdx.audio.newSound(Gdx.files.internal("sound/ghost.wav"));
+        takeDamageSound = Gdx.audio.newSound(Gdx.files.internal("sound/takeDamage.mp3"));
+        collisionSound = Gdx.audio.newSound(Gdx.files.internal("sound/collision.wav"));
+        keySound = Gdx.audio.newSound(Gdx.files.internal("sound/key.wav"));
+        heartSound = Gdx.audio.newSound(Gdx.files.internal("sound/heart.wav"));
+        victorySound = Gdx.audio.newSound(Gdx.files.internal("sound/Victory.wav"));
+        defeatSound = Gdx.audio.newSound(Gdx.files.internal("sound/defeat.mp3"));
+
+
     }
 
 
     // Screen interface methods with necessary functionality
     @Override
     public void render(float delta) {
+
+        soundTimer += Gdx.graphics.getDeltaTime();
         /**
          *  match input to functions
          */
@@ -79,7 +100,9 @@ public class GameScreen implements Screen {
             if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
                 game.goToMenu(); // Check for escape key press to go back to the menu
             if (currentHealth == 0) {
+                playOneSound(defeatSound);
                 game.goToDefeatScreen();
+
             }
 
             //ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
@@ -119,6 +142,7 @@ public class GameScreen implements Screen {
                 Key key = keyIterator.next();
 
                 if (maze.getCharacter().getRectangle().overlaps(key.getRectangle())) {
+                    playOneSound(keySound);
                     keysCollected++;
                     hud.updateKeys(keysCollected);
                     if (keysCollected >= 1) {
@@ -135,6 +159,7 @@ public class GameScreen implements Screen {
                 Heart heart = heartIterator.next();
 
                 if (maze.getCharacter().getRectangle().overlaps(heart.getRectangle())) {
+                    playOneSound(heartSound);
                     invulnerableForHeart(2f);
                     heartIterator.remove();
                 } else {
@@ -159,19 +184,19 @@ public class GameScreen implements Screen {
              */
             for (Wall wall : maze.getWalls()) {
                 if (maze.getCharacter().getRectangle().overlaps(wall.getSides()[2]) && maze.getCharacter().getRectangle().overlaps(wall.getSides()[1])) {
-                    //playOneSound(collisionSound);
+                    playOneSound(collisionSound);
                     maze.getCharacter().setDownLeftInverse(true);
                 } else if (maze.getCharacter().getRectangle().overlaps(wall.getSides()[2]) && maze.getCharacter().getRectangle().overlaps(wall.getSides()[3])) {
-                    //playOneSound(collisionSound);
+                    playOneSound(collisionSound);
                     maze.getCharacter().setDownRightInverse(true);
                 } else if (maze.getCharacter().getRectangle().overlaps(wall.getSides()[0]) && maze.getCharacter().getRectangle().overlaps(wall.getSides()[1])) {
-                    //playOneSound(collisionSound);
+                    playOneSound(collisionSound);
                     maze.getCharacter().setUpLeftInverse(true);
                 } else if (maze.getCharacter().getRectangle().overlaps(wall.getSides()[0]) && maze.getCharacter().getRectangle().overlaps(wall.getSides()[3])) {
-                    //playOneSound(collisionSound);
+                    playOneSound(collisionSound);
                     maze.getCharacter().setUpRightInverse(true);
                 } else if (maze.getCharacter().getRectangle().overlaps(wall.getSides()[0])) {
-                    //playOneSound(collisionSound);
+                    playOneSound(collisionSound);
                     maze.getCharacter().setUpInverse(true);
                 } else if (maze.getCharacter().getRectangle().overlaps(wall.getSides()[1])) {
                     //playOneSound(collisionSound);
@@ -202,7 +227,7 @@ public class GameScreen implements Screen {
             if (doorUnlocked) {
                 for (Exit exit : maze.getExits()) {
                     if (maze.getCharacter().getRectangle().overlaps(exit.getRectangle())) {
-                        //playOneSound(victorySound);
+                        playOneSound(victorySound);
                         game.goToVictoryScreen();
                     }
                 }
@@ -212,7 +237,7 @@ public class GameScreen implements Screen {
              */
             for (Trap trap : maze.getTraps()) {
                 if (maze.getCharacter().getRectangle().overlaps(trap.getRectangle())) {
-                    //playTwoSounds(fireSound, takeDamageSound);
+                    playTwoSounds(fireSound, takeDamageSound);
                     invulnerable(2f);
                 }
             }
@@ -224,7 +249,7 @@ public class GameScreen implements Screen {
              */
             for (Mob mob : maze.getMobs()) {
                 if (maze.getCharacter().getRectangle().overlaps(mob.getRectangle())) {
-                    //playTwoSounds(ghostSound, takeDamageSound);
+                    playTwoSounds(ghostSound, takeDamageSound);
                     invulnerable(1f);
                 }
 
@@ -319,6 +344,22 @@ public class GameScreen implements Screen {
     }
 
 
+    private void playOneSound(Sound sound) {
+        if (soundTimer >= 1f) {
+            sound.play();
+            soundTimer = 0f;
+        }
+    }
+
+    private void playTwoSounds(Sound sound1, Sound sound2) {
+        if (soundTimer >= 1) {
+            sound1.play();
+            sound2.play();
+            soundTimer = 0f;
+        }
+    }
+
+
 
     /**
      * invulnerability logic added here
@@ -378,11 +419,13 @@ public class GameScreen implements Screen {
 
     @Override
     public void hide() {
+        backgroundMusic.stop();
+        backgroundMusic.dispose();
     }
 
     @Override
     public void dispose() {
+        spriteBatch.dispose();
+        game.dispose();
     }
-
-    // Additional methods and logic can be added as needed for the game screen
 }
