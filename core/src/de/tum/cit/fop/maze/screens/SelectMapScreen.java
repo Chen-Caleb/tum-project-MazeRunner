@@ -1,5 +1,7 @@
 package de.tum.cit.fop.maze.screens;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -12,6 +14,8 @@ import de.tum.cit.fop.maze.MazeRunnerGame;
 
 public class SelectMapScreen extends ScreenTemplate {
 
+    private Music backgroundMusic;
+
     public SelectMapScreen(MazeRunnerGame game) {
         super(game);
         var camera = new OrthographicCamera();
@@ -23,6 +27,12 @@ public class SelectMapScreen extends ScreenTemplate {
         Label titleLabel = new Label("Choose Level", game.getSkin(), "title");
         initialTable();
         table.add(titleLabel).padBottom(200).row();
+        
+        //Music
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("dungeon.wav"));
+        backgroundMusic.setLooping(true);
+        backgroundMusic.setVolume(0.3f);
+        backgroundMusic.play();
 
         TextButton level1 = new TextButton("Level 1", game.getSkin());
         level1.addListener(new ChangeListener() {
@@ -72,6 +82,18 @@ public class SelectMapScreen extends ScreenTemplate {
 
         returnToMenu();
 
+    }
+
+    @Override
+    public void hide() {
+        backgroundMusic.stop();
+        backgroundMusic.dispose();
+    }
+
+    @Override
+    public void dispose() {
+        spriteBatch.dispose();
+        game.dispose();
     }
 
 }
