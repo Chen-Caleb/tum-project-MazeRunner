@@ -2,6 +2,7 @@ package de.tum.cit.fop.maze;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -27,6 +28,7 @@ public class MenuScreen implements Screen {
 
     private final Stage stage;
     protected Texture background;
+    protected Music music;
 
     /**
      * Constructor for MenuScreen. Sets up the camera, viewport, stage, and UI elements.
@@ -43,6 +45,13 @@ public class MenuScreen implements Screen {
         Table table = new Table(); // Create a table for layout
         table.setFillParent(true); // Make the table fill the stage
         stage.addActor(table); // Add the table to the stage
+
+
+        //Music
+        music = Gdx.audio.newMusic(Gdx.files.internal("background.mp3"));
+        music.setLooping(true);
+        music.setVolume(0.3f);
+        music.play();
 
         // Add a label as a title
         //table.add(new Label("Welcome TO Maze Runner ! ", game.getSkin(), "title")).padBottom(80).row();
@@ -131,6 +140,8 @@ public class MenuScreen implements Screen {
 
     @Override
     public void hide() {
+        music.stop();
+        music.dispose();
     }
 
 
