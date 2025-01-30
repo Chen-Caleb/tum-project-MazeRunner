@@ -163,57 +163,57 @@ public class Character extends Human {
             playerMoveRightwards();
             playerMoveUpwards();
             playerMoveLeftwards();
+
+        //attack Animations
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && Gdx.input.isKeyPressed(Input.Keys.A)) {
+            currentAnimation = characterDownAttackAnimation;
+            rectangle.y -= speed * 0.01f;
+
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && Gdx.input.isKeyPressed(Input.Keys.A)) {
+            currentAnimation = characterRightAttackAnimation;
+            rectangle.x += speed * 0.01f;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.UP) && Gdx.input.isKeyPressed(Input.Keys.A)) {
+            currentAnimation = characterUpAttackAnimation;
+            rectangle.y += speed * 0.01f;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && Gdx.input.isKeyPressed(Input.Keys.A)) {
+            currentAnimation = characterLeftAttackAnimation;
+            rectangle.x -= speed * 0.01f;
         }
 
-            //attack Animations
-            if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && Gdx.input.isKeyPressed(Input.Keys.A)) {
-                currentAnimation = characterDownAttackAnimation;
-                rectangle.y -= speed * 0.01f;
 
+        // running Animations
+        /**
+         * running logic; animation + speed increase
+         */
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
+                currentAnimation = characterDownRunningAnimation;
+                rectangle.y -= runningSpeed;
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && Gdx.input.isKeyPressed(Input.Keys.A)) {
-                currentAnimation = characterRightAttackAnimation;
-                rectangle.x += speed * 0.01f;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
+                currentAnimation = characterRightRunningAnimation;
+                rectangle.x += runningSpeed;
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.UP) && Gdx.input.isKeyPressed(Input.Keys.A)) {
-                currentAnimation = characterUpAttackAnimation;
-                rectangle.y += speed * 0.01f;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
+                currentAnimation = characterUpRunningAnimation;
+                rectangle.y += runningSpeed;
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && Gdx.input.isKeyPressed(Input.Keys.A)) {
-                currentAnimation = characterLeftAttackAnimation;
-                rectangle.x -= speed * 0.01f;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
+                currentAnimation = characterLeftRunningAnimation;
+                rectangle.x -= runningSpeed;
             }
+        }
 
-
-
-            // running Animations
-            /**
-             * running logic; animation + speed increase
-             */
-            if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-                if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
-                    currentAnimation = characterDownRunningAnimation;
-                    rectangle.y -= runningSpeed;
-                }
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-                if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
-                    currentAnimation = characterRightRunningAnimation;
-                    rectangle.x += runningSpeed;
-                }
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-                if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
-                    currentAnimation = characterUpRunningAnimation;
-                    rectangle.y += runningSpeed;
-                }
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-                if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
-                    currentAnimation = characterLeftRunningAnimation;
-                    rectangle.x -= runningSpeed;
-                }
-            }
+    }
 
         /**
          * jumping logic; animation + movement
