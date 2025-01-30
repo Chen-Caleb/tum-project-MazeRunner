@@ -54,9 +54,9 @@ public class MazeRunnerGame extends Game {
 
         // Play some background music
         // Background sound
-        Music backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("background.mp3"));
-        backgroundMusic.setLooping(true);
-        backgroundMusic.play();
+//        Music backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("background.mp3"));
+//        backgroundMusic.setLooping(true);
+//        backgroundMusic.play();
 
         goToMenu(); // Navigate to the menu screen
     }
@@ -72,18 +72,6 @@ public class MazeRunnerGame extends Game {
         }
     }
 
-    /**
-     * Switches to the game screen.
-     */
-    public void goToGame() {
-//        this.setScreen(new GameScreen(this,"maps/level-2.properties")); // Set the current screen to GameScreen
-//        if (menuScreen != null) {
-//            menuScreen.dispose(); // Dispose the menu screen if it exists
-//            menuScreen = null;
-//        }
-
-
-    }
 
     //Switches to different game screen through the level
     public void goToGameLevel1() {
