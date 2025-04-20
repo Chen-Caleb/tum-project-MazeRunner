@@ -25,7 +25,7 @@ public class GameScreen implements Screen {
     private final BitmapFont font;
     private final Maze maze;
     private final HUD hud;
-    public int currentHealth;
+    public static int currentHealth;
     private float invulnerabilityTimer;
     private boolean invulnerable;
     private int keysCollected = 0;
@@ -90,6 +90,13 @@ public class GameScreen implements Screen {
     // Screen interface methods with necessary functionality
     @Override
     public void render(float delta) {
+        if (invulnerable) {
+            invulnerabilityTimer += Gdx.graphics.getDeltaTime(); // 计算无敌时间
+            if (invulnerabilityTimer >= 5f) { // 5秒后取消无敌状态
+                invulnerable = false;
+                invulnerabilityTimer = 0f; // 复位计时器
+            }
+        }
 
         soundTimer += Gdx.graphics.getDeltaTime();
         /**
@@ -160,12 +167,27 @@ public class GameScreen implements Screen {
 
                 if (maze.getCharacter().getRectangle().overlaps(heart.getRectangle())) {
                     playOneSound(heartSound);
-                    invulnerableForHeart(2f);
+                    invulnerableForHeart(1f);
                     heartIterator.remove();
                 } else {
                     heart.render(spriteBatch);
                 }
             }
+
+            Iterator<Shield> shieldIterator = maze.getShields().iterator();
+            while (shieldIterator.hasNext()) {
+                Shield shield = shieldIterator.next();
+
+                if (maze.getCharacter().getRectangle().overlaps(shield.getRectangle())) {
+                    playOneSound(heartSound);
+                    invulnerableForShield(10f);
+                    shieldIterator.remove();
+                } else {
+                    shield.render(spriteBatch);
+                }
+            }
+
+
 
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
                 invulnerableForAttack(1f);
@@ -238,7 +260,7 @@ public class GameScreen implements Screen {
             for (Trap trap : maze.getTraps()) {
                 if (maze.getCharacter().getRectangle().overlaps(trap.getRectangle())) {
                     playTwoSounds(fireSound, takeDamageSound);
-                    invulnerable(2f);
+                    invulnerable(0.5f);
                 }
             }
 
@@ -250,7 +272,7 @@ public class GameScreen implements Screen {
             for (Mob mob : maze.getMobs()) {
                 if (maze.getCharacter().getRectangle().overlaps(mob.getRectangle())) {
                     playTwoSounds(ghostSound, takeDamageSound);
-                    invulnerable(1f);
+                    invulnerable(0.5f);
                 }
 
                 /**
@@ -306,11 +328,7 @@ public class GameScreen implements Screen {
             hud.updateTimer(delta);
             renderHUD();
             invulnerabilityTimer += Gdx.graphics.getDeltaTime();
-            //game.getSpriteBatch().end(); // Important to call this after drawing everything
         }else {
-            //pauseScreen.show();
-            //pauseScreen.render(delta);
-            //pauseScreen.hide();
         }
     }
     /**
@@ -318,18 +336,23 @@ public class GameScreen implements Screen {
      * also allow player to view the whole map by pressing "M"
      */
     private void renderCamera() {
+        // Set camera position to match the character's position
         camera.position.x = maze.getCharacter().getRectangle().x;
         camera.position.y = maze.getCharacter().getRectangle().y;
 
-        float zoomX = Gdx.graphics.getWidth() / maze.getMapWidth() ;
-        float zoomY = Gdx.graphics.getHeight() / maze.getMapHeight() ;
+        // Calculate the appropriate zoom level
+        float zoomX = Gdx.graphics.getWidth() / maze.getMapWidth();
+        float zoomY = Gdx.graphics.getHeight() / maze.getMapHeight();
         float zoom = Math.min(zoomX, zoomY);
+
+        // Enable full-map mode
         if (Gdx.input.isKeyPressed(Input.Keys.M)) {
-            camera.zoom = zoom / 3f; // 地图缩小，显示更多地形
-            camera.position.set(maze.getMapWidth() / 2, maze.getMapHeight() / 2, 0);
+            camera.zoom = zoom / 3f;  // Zoom out to show the entire maze
+            camera.position.set(maze.getMapWidth() / 2, maze.getMapHeight() / 2, 0); // Move camera to the maze center
         } else {
-            camera.zoom = 0.2f;
+            camera.zoom = 0.2f;  // Default zoom for close-up gameplay
         }
+
         camera.update();
     }
 
@@ -367,36 +390,31 @@ public class GameScreen implements Screen {
      */
     public void invulnerable(float time) {
         if (!invulnerable) {
-            currentHealth--;
+            currentHealth--; // 只有在不无敌时才扣血
             invulnerable = true;
-        }
-
-        if (invulnerabilityTimer >= time) {
-            invulnerable = false;
-            invulnerabilityTimer = 0f;
+            invulnerabilityTimer = 0f; // 重新计时
         }
     }
 
     public void invulnerableForHeart(float time) {
+        currentHealth++;
         if (!invulnerable) {
-            currentHealth++;
             invulnerable = true;
-        }
-
-        if (invulnerabilityTimer >= time) {
-            invulnerable = false;
-            invulnerabilityTimer = 0f;
+            invulnerabilityTimer = 0f; // 重新计时
         }
     }
 
     public void invulnerableForAttack(float time) {
         if (!invulnerable) {
             invulnerable = true;
+            invulnerabilityTimer = 0f; // 重新计时
         }
+    }
 
-        if (invulnerabilityTimer >= time) {
-            invulnerable = false;
-            invulnerabilityTimer = 0f;
+    public void invulnerableForShield(float time) {
+        if (!invulnerable) {
+            invulnerable = true;
+            invulnerabilityTimer = 0f; // 重新计时
         }
     }
 
@@ -427,5 +445,10 @@ public class GameScreen implements Screen {
     public void dispose() {
         spriteBatch.dispose();
         game.dispose();
+    }
+
+    public static int getCurrentHealth() {
+        return currentHealth;
+
     }
 }

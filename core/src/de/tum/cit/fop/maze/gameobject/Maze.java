@@ -17,6 +17,7 @@ public class Maze {
     private List<Mob> mobs = new ArrayList<>();
     private List<Key> keys = new ArrayList<>();
     private List<Heart> hearts = new ArrayList<>();
+    private List<Shield> shields = new ArrayList<>();
 
 
     private final String mapFile;
@@ -28,8 +29,8 @@ public class Maze {
         }
         this.mapFile = mapFile;
         this.properties = loadProperties(this.mapFile);
-        this.mapWidth = 1f; // 默认宽度
-        this.mapHeight = 1f; // 默认高度
+        this.mapWidth = 1f;
+        this.mapHeight = 1f;
     }
 
     private Properties loadProperties(String file) {
@@ -101,6 +102,9 @@ public class Maze {
             case 6:
                 hearts.add(new Heart(x, y));
                 break;
+            case 7:
+                shields.add(new Shield(x, y));
+                break;
             default:
                 System.err.println("Unknown element type: " + value);
         }
@@ -144,6 +148,10 @@ public class Maze {
 
     public List<Heart> getHearts() {
         return hearts;
+    }
+
+    public List<Shield> getShields() {
+        return shields;
     }
 
     public String getMapFile() {

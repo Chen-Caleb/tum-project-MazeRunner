@@ -19,7 +19,7 @@ public class Mob extends Human {
     private float directionInterval;
 
 
-    private final Character character; // 引用主角
+    private final Character character;
 
     public Mob(float x, float y, float speed, Character character) {
         super(x, y, speed);
